@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Analyzer</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: auto; padding: 20px; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        button { padding: 10px 20px; }
+        .result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Resume Analyzer API</h1>
+    
+    <label>Paste your Resume:</label>
+    <textarea id="resumeText" placeholder="Paste resume text here"></textarea>
+    
+    <label>Paste Job Description:</label>
+    <textarea id="jobDescription" placeholder="Paste job description here"></textarea>
+    
+    <button onclick="analyzeResume()">Analyze Resume</button>
+    
+    <div class="result" id="result"></div>
+
+    <script>
+        async function analyzeResume() {
+            const resumeText = document.getElementById("resumeText").value;
+            const jobDescription = document.getElementById("jobDescription").value;
+
+            if (!resumeText || !jobDescription) {
+                alert("Please fill both fields!");
+                return;
+            }
+
+            const response = await fetch("/analyze", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ resumeText, jobDescription })
+            });
+
+            const data = await response.json();
+
+            document.getElementById("result").innerHTML = `
+                <h3>Matched Skills:</h3> ${data.matchedSkills.join(", ")}
+                <h3>Missing Skills:</h3> ${data.missingSkills.join(", ")}
+                <h3>Match Percentage:</h3> ${data.matchPercentage}%
+                <h3>Recommendation:</h3> ${data.recommendation}
+            `;
+        }
+    </script>
+</body>
+</html>

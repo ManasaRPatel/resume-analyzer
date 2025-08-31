@@ -1,0 +1,178 @@
+Possible Interview Questions — You Can Easily Answer These:
+💬 Interviewer Might Ask	✅ You Can Say
+What is this project about?	It's a Node.js API that compares a resume and job description, finds matched/missing skills, and gives suggestions.
+How does it detect skills?	It parses the input text using a keyword list and checks for overlaps.
+What stack did you use?	Node.js, Express, Postman for testing, and basic JS logic.
+Did you deploy it?	Not yet. I focused on making the logic solid. Deployment is my next step.
+Can it be extended?	Yes — I can add PDF parsing, a frontend, or a database backend if needed.
+
+ Q1: What is the Resume Analyzer API?
+A:
+It’s a backend API built using Node.js and Express that analyzes a resume text by comparing it to a job description. It checks for matched and missing skills and gives a match percentage along with improvement suggestions.
+
+🔹 Q2: What problem does it solve?
+A:
+It helps students or job applicants evaluate how well their resumes match a specific job posting, especially during placement drives. It gives clear feedback on what skills are missing.
+
+🔹 Q3: How does it find matched or missing skills?
+A:
+It uses a fixed list of in-demand tech keywords like "Java", "Python", "SQL", etc., and checks if those keywords exist in both the resume and the job description using case-insensitive matching.
+
+🔹 Q4: What tech stack did you use?
+A:
+
+Backend: Node.js with Express
+
+Routing: Express Router
+
+Text Analysis: Pure JavaScript string logic
+
+Testing: Postman (also used Thunder Client)
+
+Input/Output: JSON-based REST API
+
+🔹 Q5: What is the core logic of the matcher?
+A:
+It lowers the case of both texts, then filters the skillKeywords[] list by checking if each keyword exists in the resume and job description. The matched ones are collected, the unmatched ones are flagged, and the match percentage is calculated.
+
+🔹 Q6: How is this useful in placement drives?
+A:
+It can be used by students to check if their resume aligns with the job requirements. Even placement officers can use it to screen multiple resumes quickly based on job-fit.
+
+🔹 Q7: How can this project be improved?
+A:
+
+Add PDF/DOCX upload and parsing
+
+Save the results to a database
+
+Create a frontend interface
+
+Deploy it on Render or Railway
+
+Train a small ML model for fuzzy matching of skills
+
+🔹 Q8: Did you face any issues while building it?
+A:
+Yes, initially my API routes returned 404 due to routing setup issues. I fixed it by exporting the router correctly and testing everything using Thunder Client and Postman. I also handled empty input errors.
+
+🔹 Q9: Did you deploy it?
+A:
+Not yet, I focused on making the API logic clean and testable locally. I plan to deploy it soon using Render.
+
+🔹 Q10: Why did you choose this project?
+A:
+Because it's relevant to placements, practical for real-world use, and it helped me strengthen my understanding of backend APIs and JSON handling.
+
+| Concept            | You Should Know                               |
+| ------------------ | --------------------------------------------- |
+| `express.Router()` | Why & how we use routes in Express            |
+| `app.use()`        | Middleware chaining & base path logic         |
+| `req.body`         | How JSON input is parsed & validated          |
+| Functional logic   | `filter()`, `includes()`, `toLowerCase()`     |
+| Response design    | JSON structure, status codes (200, 400, 404)  |
+| Modules            | `module.exports`, `require()` flow            |
+| Testing            | How Thunder Client/Postman simulates frontend |
+| Match algorithm    | Why we chose keyword-based matching           |
+| Match % formula    | `(matched / required) * 100` logic            |
+| Recommendations    | Why it's helpful, how it’s generated          |
+
+What if the same skill is repeated in resume? Will it affect the result?
+A: No. We use filter() with includes(), so duplicates don’t matter. The skill is matched once only.
+
+🔸 Q: What if job description uses synonyms like "Javascript" instead of "JS"?
+A: Currently, it matches exact keywords. To handle synonyms or variations, we can add:
+
+A synonyms dictionary
+
+Fuzzy string matching
+
+NLP libraries like compromise or natural
+
+🔸 Q: Why not use regular expressions instead of includes()?
+A: includes() is faster and simpler for known keywords. But for partial matches or patterns, RegExp could be better. We can switch if our logic evolves.
+
+🔸 Q: What if the input is empty, or only whitespace?
+A: We validate for both resumeText and jobDescription. We can add .trim() checks or regex to catch empty text more robustly.
+
+🔸 Q: Why JSON? Could this be done with form-data or query params?
+A: JSON is lightweight, ideal for structured data like resume vs JD comparison. form-data is used for file uploads, and query is better for GET requests.
+
+🔸 Q: How scalable is this for 1000+ resumes?
+A: Current version is single-user. For scaling:
+
+Move to async DB
+
+Use batch processing
+
+Deploy on Node clusters or serverless functions
+
+🔸 Q: If you had to make it 100% dynamic, how would you train it to detect any tech skill?
+A: Use a dataset of tech skills (like from GitHub or LinkedIn), then build:
+
+A machine learning model to classify
+
+Or use AI APIs (like OpenAI) to extract skills from resumes intelligently
+
+✅ Tech Stack You Used:
+Layer	Technology	Purpose
+🧠 Backend Logic	Node.js	JavaScript runtime to build the API
+⚙️ Framework	Express.js	Simplifies routing, middleware, API creation
+🧾 Data Parsing	body-parser (or Express' built-in JSON parser)	Converts incoming JSON request into usable JS objects
+📦 Module System	CommonJS (require/module.exports)	Code organization
+🧪 Testing Tool	Postman / Thunder Client	Sends test HTTP requests to your backend
+🧮 Logic Engine	JavaScript Array/String methods	Skill matching, analysis, and score calculation
+
+⚙️ How the Stack Works Together (Step-by-Step)
+🔹 1. User sends POST request
+You input resume text & job description using Postman or Thunder Client
+
+Data goes to:
+POST http://localhost:3000/api/analyze
+
+🔹 2. Express app receives the request
+Express receives the request inside the router (analyze.js)
+
+body-parser middleware parses the incoming JSON body:
+
+js
+Copy
+Edit
+const { resumeText, jobDescription } = req.body;
+🔹 3. Logic is passed to matcher
+Router calls your custom function in matcher.js
+
+js
+Copy
+Edit
+const result = matchResume(resumeText, jobDescription);
+This is where the keyword matching and logic runs
+
+🔹 4. Core matching logic (matcher.js)
+This file:
+
+Converts both inputs to lowercase (toLowerCase)
+
+Filters the skillKeywords[] to find:
+
+matchedSkills: Present in both resume and JD
+
+missingSkills: In JD but not in resume
+
+Calculates match percentage
+
+Adds a smart recommendation
+
+🔹 5. Response is sent back as JSON
+Finally:
+
+js
+Copy
+Edit
+res.json({
+  matchedSkills,
+  missingSkills,
+  matchPercentage,
+  recommendation
+});
+Postman displays the result on screen.
